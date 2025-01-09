@@ -322,6 +322,7 @@ add_link_options(
         )
 
 add_executable(${EXECUTABLE})
+add_dependencies(${EXECUTABLE} update_submodules_bm_protocol)
 
 # Include LIB directory
 if(NOT APP MATCHES "bootloader")
