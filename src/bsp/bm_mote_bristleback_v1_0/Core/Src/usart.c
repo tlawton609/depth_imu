@@ -26,8 +26,7 @@
 
 /* LPUART1 init function */
 
-void MX_LPUART1_UART_Init(void)
-{
+void MX_LPUART1_UART_Init(void) {
 
   /* USER CODE BEGIN LPUART1_Init 0 */
 
@@ -42,8 +41,7 @@ void MX_LPUART1_UART_Init(void)
   */
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPUART1;
   PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_HSI;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
     Error_Handler();
   }
 
@@ -55,7 +53,7 @@ void MX_LPUART1_UART_Init(void)
   PA2   ------> LPUART1_TX
   PA3   ------> LPUART1_RX
   */
-  GPIO_InitStruct.Pin = PAYLOAD_TX_Pin|PAYLOAD_RX_Pin;
+  GPIO_InitStruct.Pin = PAYLOAD_TX_Pin | PAYLOAD_RX_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -64,7 +62,7 @@ void MX_LPUART1_UART_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* LPUART1 interrupt Init */
-  NVIC_SetPriority(LPUART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),6, 0));
+  NVIC_SetPriority(LPUART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 6, 0));
   NVIC_EnableIRQ(LPUART1_IRQn);
 
   /* USER CODE BEGIN LPUART1_Init 1 */
@@ -91,12 +89,10 @@ void MX_LPUART1_UART_Init(void)
   LL_RCC_HSI_EnableInStopMode();
 
   /* USER CODE END LPUART1_Init 2 */
-
 }
 /* USART3 init function */
 
-void MX_USART3_UART_Init(void)
-{
+void MX_USART3_UART_Init(void) {
 
   /* USER CODE BEGIN USART3_Init 0 */
 
@@ -111,8 +107,7 @@ void MX_USART3_UART_Init(void)
   */
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART3;
   PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
     Error_Handler();
   }
 
@@ -124,7 +119,7 @@ void MX_USART3_UART_Init(void)
   PA5   ------> USART3_RX
   PA7   ------> USART3_TX
   */
-  GPIO_InitStruct.Pin = BM_SCK_RX3_Pin|BM_MOSI_TX3_Pin;
+  GPIO_InitStruct.Pin = BM_SCK_RX3_Pin | BM_MOSI_TX3_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -133,7 +128,7 @@ void MX_USART3_UART_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USART3 interrupt Init */
-  NVIC_SetPriority(USART3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),6, 0));
+  NVIC_SetPriority(USART3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 6, 0));
   NVIC_EnableIRQ(USART3_IRQn);
 
   /* USER CODE BEGIN USART3_Init 1 */
@@ -156,7 +151,6 @@ void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
-
 }
 
 /* USER CODE BEGIN 1 */
