@@ -80,8 +80,9 @@ bool endTransaction(uint32_t wait_ms) {
   _transactionInProgress = false;
   // If there were no writes during the transaction, don't wait for writes to complete.
   if (!_writeDuringTransaction) {
-    if (_postTxFunction != nullptr)
+    if (_postTxFunction != nullptr) {
       _postTxFunction(); // Safely call the function
+    }
     return true;
   }
   // After each transmission compeltes, TC interrupt will call pluartPostTransactionCb,
@@ -94,8 +95,9 @@ bool endTransaction(uint32_t wait_ms) {
     ret_value = false; // TODO - maybe better to assert(false) here?
   }
   // Call the post-transaction function after the final transmission is fully complete
-  if (_postTxFunction != nullptr)
+  if (_postTxFunction != nullptr) {
     _postTxFunction();
+  }
   return ret_value;
 }
 
