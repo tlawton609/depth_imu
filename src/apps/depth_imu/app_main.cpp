@@ -17,7 +17,6 @@
 
 #include "app_pub_sub.h"
 #include "app_util.h"
-#include "bristlefin.h"
 #include "bristlemouth_client.h"
 #include "bsp.h"
 #include "cli.h"
@@ -31,9 +30,9 @@ extern "C" {
 #include "debug_configuration.h"
 #include "debug_dfu.h"
 #include "debug_gpio.h"
+#include "debug_i2c.h"
 #include "debug_memfault.h"
 #include "debug_nvm_cli.h"
-#include "debug_pluart_cli.h"
 #include "debug_rtc.h"
 #include "debug_spotter.h"
 #include "debug_sys.h"
@@ -74,6 +73,8 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
+
+static const DebugI2C_t debugI2CInterfaces[] = {{1, &i2c1}};
 
 static void defaultTask(void *parameters);
 
@@ -374,6 +375,7 @@ static void defaultTask(void *parameters) {
   timer_callback_handler_init();
   spiflash::W25 debugW25(&spi2, &FLASH_CS);
   debugW25Init(&debugW25);
+  debugI2CInit(debugI2CInterfaces, sizeof(debugI2CInterfaces) / sizeof(DebugI2C_t));
   NvmPartition debug_user_partition(debugW25, user_configuration);
   NvmPartition debug_hardware_partition(debugW25, hardware_configuration);
   NvmPartition debug_system_partition(debugW25, system_configuration);
@@ -384,7 +386,6 @@ static void defaultTask(void *parameters) {
   NvmPartition dfu_partition(debugW25, dfu_configuration);
   dfu_partition_global = &dfu_partition;
   debugNvmCliInit(&debug_cli_partition, &dfu_partition);
-  debugPlUartCliInit();
   debugDfuInit(&dfu_partition);
   bcl_init();
   get_config_uint(BM_CFG_PARTITION_SYSTEM, "sensorsPollIntervalMs",
