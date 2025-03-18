@@ -17,7 +17,6 @@ typedef struct pme_dissolved_oxygen_aggregations_s {
 } pme_dissolved_oxygen_aggregations_t;
 
 typedef struct PmeDissolvedOxygenSensor : public AbstractSensor {
-  uint32_t agg_period_ms;
   AveragingSampler temperature_deg_c;
   AveragingSampler do_mg_per_l;
   AveragingSampler quality;
@@ -30,6 +29,15 @@ typedef struct PmeDissolvedOxygenSensor : public AbstractSensor {
   static constexpr uint32_t DEFAULT_PME_DISSOLVED_READING_PERIOD_MS = 10 * 60 * 1000;
   static constexpr uint32_t N_SAMPLES_PAD = 2;
   static constexpr uint8_t MIN_READINGS_FOR_AGGREGATION = 1;
+  static constexpr double TEMP_SAMPLE_MEMBER_MIN = -0.414;
+  static constexpr double TEMP_SAMPLE_MEMBER_MAX = 35.6;
+  static constexpr double DO_SAMPLE_MEMBER_MIN = -1.0;
+  static constexpr double DO_SAMPLE_MEMBER_MAX = 100.0;
+  static constexpr double QUALITY_SAMPLE_MEMBER_MIN = 0.0;
+  static constexpr double QUALITY_SAMPLE_MEMBER_MAX = 1.0;
+  static constexpr double DO_SATURATION_SAMPLE_MEMBER_MIN = 0.0;
+  static constexpr double DO_SATURATION_SAMPLE_MEMBER_MAX = 150.0;
+
 
 public:
   bool subscribe() override;
@@ -41,7 +49,10 @@ private:
                                             uint16_t data_len, uint8_t type, uint8_t version);
 
 private:
-  static constexpr char subtag[] = "/pme/do_reading";
+  static constexpr char subtag[] = "/pme/do_data";
 } PmeDissolvedOxygen_t;
 
-PmeDissolvedOxygen_t *createPmeDissolvedOxygenSub(uint64_t node_id, uint32_t sample_duration_ms);
+PmeDissolvedOxygen_t *createPmeDissolvedOxygenSub(uint64_t node_id, uint32_t sample_duration_ms,
+                                                  uint32_t subsample_interval_ms,
+                                                  uint32_t subsample_duration_ms,
+                                                  bool subsample_enabled);
