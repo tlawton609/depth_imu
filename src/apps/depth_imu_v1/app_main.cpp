@@ -17,7 +17,6 @@
 
 #include "app_pub_sub.h"
 #include "app_util.h"
-#include "bristlefin.h"
 #include "bristlemouth_client.h"
 #include "bsp.h"
 #include "cli.h"
@@ -33,7 +32,6 @@ extern "C" {
 #include "debug_gpio.h"
 #include "debug_memfault.h"
 #include "debug_nvm_cli.h"
-#include "debug_pluart_cli.h"
 #include "debug_rtc.h"
 #include "debug_spotter.h"
 #include "debug_sys.h"
@@ -214,18 +212,9 @@ void handle_sensor_subscriptions(uint64_t node_id, const char *topic, uint16_t t
   (void)node_id;
   (void)version;
   (void)type;
-  if (strncmp("button", topic, topic_len) == 0) {
-    if (strncmp("on", reinterpret_cast<const char *>(data), data_len) == 0) {
-      IOWrite(&BF_LED_G1, LED_ON);
-    } else if (strncmp("off", reinterpret_cast<const char *>(data), data_len) == 0) {
-      IOWrite(&BF_LED_G1, LED_OFF);
-    } else {
-      // Not handled
-    }
-  } else {
-    printf("Topic: %.*s\n", topic_len, topic);
-    printf("Data: %.*s\n", data_len, data);
-  }
+  
+  printf("Topic: %.*s\n", topic_len, topic);
+  printf("Data: %.*s\n", data_len, data);
 }
 
 void handle_bm_subscriptions(uint64_t node_id, const char *topic, uint16_t topic_len,
@@ -271,8 +260,8 @@ static const DebugGpio_t debugGpioPins[] = {
     {"adin_int", &ADIN_INT, GPIO_IN},
     {"adin_pwr", &ADIN_PWR, GPIO_OUT},
     {"adin_rst", &ADIN_RST, GPIO_OUT},
-    {"i2c_mux_rst", &I2C_MUX_RESET, GPIO_OUT},
-    {"gpio1", &GPIO1, GPIO_OUT},
+    {"imu_rst", &IMU_RESET, GPIO_OUT},
+    {"gpio_int", &EOC_INT, GPIO_IN},
     {"gpio2", &GPIO2, GPIO_OUT},
     {"bm_int", &BM_INT, GPIO_IN},
     {"bm_cs", &BM_CS, GPIO_OUT},
@@ -280,22 +269,7 @@ static const DebugGpio_t debugGpioPins[] = {
     {"flash_cs", &FLASH_CS, GPIO_OUT},
     {"boot_led", &BOOT_LED, GPIO_IN},
     {"vusb_detect", &VUSB_DETECT, GPIO_IN},
-    {"bf_io1", &BF_IO1, GPIO_IN},
-    {"bf_io2", &BF_IO2, GPIO_IN},
-    {"bf_hfio", &BF_HFIO, GPIO_OUT},
-    {"bf_3v3_en", &BF_3V3_EN, GPIO_OUT},
-    {"bf_5v_en", &BF_5V_EN, GPIO_OUT},
-    {"bf_imu_int", &BF_IMU_INT, GPIO_IN},
-    {"bf_imu_rst", &BF_IMU_RST, GPIO_OUT},
-    {"bf_sdi12_oe", &BF_SDI12_OE, GPIO_OUT},
-    {"bf_tp16", &BF_TP16, GPIO_IN},
-    {"bf_led_g1", &BF_LED_G1, GPIO_OUT},
-    {"bf_led_r1", &BF_LED_R1, GPIO_OUT},
-    {"bf_led_g2", &BF_LED_G2, GPIO_OUT},
-    {"bf_led_r2", &BF_LED_R2, GPIO_OUT},
-    {"bf_pl_buck_en", &BF_PL_BUCK_EN, GPIO_OUT},
-    {"bf_tp7", &BF_TP7, GPIO_IN},
-    {"bf_tp8", &BF_TP8, GPIO_IN},
+    {"imu_int", &IMU_INT, GPIO_IN},
 };
 
 /* USER CODE EXECUTED HERE */
@@ -384,7 +358,6 @@ static void defaultTask(void *parameters) {
   NvmPartition dfu_partition(debugW25, dfu_configuration);
   dfu_partition_global = &dfu_partition;
   debugNvmCliInit(&debug_cli_partition, &dfu_partition);
-  debugPlUartCliInit();
   debugDfuInit(&dfu_partition);
   bcl_init();
   get_config_uint(BM_CFG_PARTITION_SYSTEM, "sensorsPollIntervalMs",

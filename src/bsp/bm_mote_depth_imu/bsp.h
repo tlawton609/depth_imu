@@ -22,10 +22,10 @@ void bspInit();
 
 // Pin definitions
 extern IOPinHandle_t GPIO2;
-extern IOPinHandle_t GPIO1;
+extern IOPinHandle_t EOC_INT;
 extern IOPinHandle_t VUSB_DETECT;
-extern IOPinHandle_t IOEXP_INT;
-extern IOPinHandle_t I2C_MUX_RESET;
+extern IOPinHandle_t IMU_INT;
+extern IOPinHandle_t IMU_RESET;
 extern IOPinHandle_t BM_CS;
 extern IOPinHandle_t BM_SCK_RX3;
 extern IOPinHandle_t BM_MISO;
@@ -49,24 +49,6 @@ extern IOPinHandle_t DEBUG_TX;
 extern IOPinHandle_t PAYLOAD_RX;
 extern IOPinHandle_t PAYLOAD_TX;
 
-// Bristlefine IO expander pins
-extern IOPinHandle_t BF_IO1;
-extern IOPinHandle_t BF_IO2;
-extern IOPinHandle_t BF_HFIO;
-extern IOPinHandle_t BF_3V3_EN;
-extern IOPinHandle_t BF_5V_EN;
-extern IOPinHandle_t BF_IMU_INT;
-extern IOPinHandle_t BF_IMU_RST;
-extern IOPinHandle_t BF_SDI12_OE;
-extern IOPinHandle_t BF_TP16;
-extern IOPinHandle_t BF_LED_G1;
-extern IOPinHandle_t BF_LED_R1;
-extern IOPinHandle_t BF_LED_G2;
-extern IOPinHandle_t BF_LED_R2;
-extern IOPinHandle_t BF_PL_BUCK_EN;
-extern IOPinHandle_t BF_TP7;
-extern IOPinHandle_t BF_TP8;
-
 // SPI Interfaces
 extern SPIInterface_t spi1;
 extern SPIInterface_t spi2;
@@ -88,9 +70,8 @@ typedef struct adin_pins_s {
 #define I2C_INA_PODL_ADDR  (0x41)
 #define NUM_INA232_DEV (2)
 
-#define TCA9546A_ADDR (0x70)
-
-#define MS5803_ADDR (0x77)
+#define IMU_ADDR (0x4A)
+#define PA7LD_ADDR (0x40)
 
 #ifdef __cplusplus
 }

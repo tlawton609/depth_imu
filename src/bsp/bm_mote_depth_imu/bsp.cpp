@@ -68,35 +68,7 @@ void bspInit() {
   // Turn on Adin2111
   IOWrite(&ADIN_PWR, 1);
 
-  IOWrite(&I2C_MUX_RESET, 1);
-
-  // Initialize the IO Expander
-  if (pca9535Init(&bristlefinIOExpander) == pdPASS) {
-    IORegisterCallback(&IOEXP_INT, pca9535IRQHandler, &bristlefinIOExpander);
-  }
-
-  // Turn LEDS on by default
-  IOWrite(&BF_LED_G1, 0);
-  IOWrite(&BF_LED_R1, 0);
-  IOWrite(&BF_LED_G2, 0);
-  IOWrite(&BF_LED_R2, 0);
-
-  IOConfigure(&BF_IO1, NULL);
-  IOConfigure(&BF_IO2, NULL);
-  IOConfigure(&BF_HFIO, NULL);
-  IOConfigure(&BF_3V3_EN, NULL);
-  IOConfigure(&BF_5V_EN, NULL);
-  IOConfigure(&BF_IMU_INT, NULL);
-  IOConfigure(&BF_IMU_RST, NULL);
-  IOConfigure(&BF_SDI12_OE, NULL);
-  IOConfigure(&BF_TP16, NULL);
-  IOConfigure(&BF_PL_BUCK_EN, NULL);
-  IOConfigure(&BF_TP7, NULL);
-  IOConfigure(&BF_TP8, NULL);
-  IOConfigure(&BF_LED_G1, NULL);
-  IOConfigure(&BF_LED_R1, NULL);
-  IOConfigure(&BF_LED_G2, NULL);
-  IOConfigure(&BF_LED_R2, NULL);
+  IOWrite(&IMU_RESET, 1);
 }
 
 bool usb_is_connected() {

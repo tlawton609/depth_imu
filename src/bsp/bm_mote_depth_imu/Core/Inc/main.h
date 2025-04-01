@@ -75,14 +75,14 @@ void SystemPower_Config_ext(void);
 /* Private defines -----------------------------------------------------------*/
 #define GPIO2_Pin LL_GPIO_PIN_13
 #define GPIO2_GPIO_Port GPIOC
-#define GPIO1_Pin LL_GPIO_PIN_0
-#define GPIO1_GPIO_Port GPIOH
+#define EOC_INT_Pin LL_GPIO_PIN_0
+#define EOC_INT_GPIO_Port GPIOH
 #define ADIN_PWR_Pin LL_GPIO_PIN_1
 #define ADIN_PWR_GPIO_Port GPIOH
 #define ADIN_RST_Pin LL_GPIO_PIN_0
 #define ADIN_RST_GPIO_Port GPIOA
-#define I2C_MUX_RESET_Pin LL_GPIO_PIN_1
-#define I2C_MUX_RESET_GPIO_Port GPIOA
+#define IMU_RESET_Pin LL_GPIO_PIN_1
+#define IMU_RESET_GPIO_Port GPIOA
 #define PAYLOAD_TX_Pin LL_GPIO_PIN_2
 #define PAYLOAD_TX_GPIO_Port GPIOA
 #define PAYLOAD_RX_Pin LL_GPIO_PIN_3
@@ -110,9 +110,8 @@ void SystemPower_Config_ext(void);
 #define VUSB_DETECT_Pin LL_GPIO_PIN_9
 #define VUSB_DETECT_GPIO_Port GPIOA
 #define VUSB_DETECT_EXTI_IRQn EXTI9_IRQn
-#define IOEXP_INT_Pin LL_GPIO_PIN_10
-#define IOEXP_INT_GPIO_Port GPIOA
-#define IOEXP_INT_EXTI_IRQn EXTI10_IRQn
+#define IMU_INT_Pin LL_GPIO_PIN_10
+#define IMU_INT_GPIO_Port GPIOA
 #define ADIN_CS_Pin LL_GPIO_PIN_15
 #define ADIN_CS_GPIO_Port GPIOA
 #define ADIN_SCK_Pin LL_GPIO_PIN_3
@@ -126,6 +125,7 @@ void SystemPower_Config_ext(void);
 #define ADIN_INT_Pin LL_GPIO_PIN_8
 #define ADIN_INT_GPIO_Port GPIOB
 #define ADIN_INT_EXTI_IRQn EXTI8_IRQn
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
