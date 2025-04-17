@@ -67,14 +67,14 @@ void ledAllOff() {
 }
 
 void saveLastWipeEpoch(uint32_t newLastWipeEpochS) {
-  set_config_uint(BM_CFG_PARTITION_SYSTEM, LAST_WIPE_EPOCH_KEY, strlen(LAST_WIPE_EPOCH_KEY),
+  set_config_uint(BM_CFG_PARTITION_HARDWARE, LAST_WIPE_EPOCH_KEY, strlen(LAST_WIPE_EPOCH_KEY),
                   newLastWipeEpochS);
-  save_config(BM_CFG_PARTITION_SYSTEM, false);
+  save_config(BM_CFG_PARTITION_HARDWARE, false);
   lastWipeEpochS = newLastWipeEpochS;
 }
 
 uint32_t loadLastWipeEpoch() {
-  bool success = get_config_uint(BM_CFG_PARTITION_SYSTEM, LAST_WIPE_EPOCH_KEY,
+  bool success = get_config_uint(BM_CFG_PARTITION_HARDWARE, LAST_WIPE_EPOCH_KEY,
                                  strlen(LAST_WIPE_EPOCH_KEY), &lastWipeEpochS);
   if (!success) {
     printf("LAST_WIPE_EPOCH_KEY not found. Initializing to 0.\n");
@@ -162,7 +162,7 @@ bool PmeSensor::getDoData(PmeDissolvedOxygenMsg::Data &d) {
     uint16_t do_read_len = PLUART::readLine(_DOTpayload_buffer, sizeof(_DOTpayload_buffer));
     ledBlinkOnce(&LED_GREEN);
     // Make spotter_log conditional on system config
-    if (pmeLogEnable) {
+    if (pmeLogEnable == 1) {
       spotter_log(0, PME_DO_RAW_LOG, USE_TIMESTAMP, "tick: %" PRIu64 ", rtc: %s, line: %.*s\n",
                   uptimeGetMs(), rtc_time_str, do_read_len, _DOTpayload_buffer);
     }
