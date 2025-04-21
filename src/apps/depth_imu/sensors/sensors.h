@@ -10,7 +10,7 @@ extern "C" {
 #define DEFAULT_SENSORS_CHECK_S 60000
 
 void sensorsInit();
-extern Bristlefin bristlefin;
+
 #ifdef __cplusplus
 }
 #endif
