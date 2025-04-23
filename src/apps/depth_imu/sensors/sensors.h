@@ -1,5 +1,4 @@
 #pragma once
-#include "bristlefin.h"
 
 #ifdef __cplusplus
 extern "C" {
