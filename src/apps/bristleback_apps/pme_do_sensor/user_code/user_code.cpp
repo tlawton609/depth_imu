@@ -42,11 +42,8 @@
 */
 
 uint32_t pmeLogEnable = 1;
-bool pmeLogEnableCfg = false;
 uint32_t pmeDOTIntervalS = 600;
-bool pmeDOTIntervalSCfg = false;
 uint32_t pmeWipeIntervalS = 14400;
-bool pmeWipeIntervalSCfg = false;
 
 static PmeSensor pmeSensor;
 
@@ -87,44 +84,25 @@ void debugTx(void) {}
 
 void setup(void) {
   // Load system configuration & initialize if not configured by user
-  if (get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_LOG_ENABLE, strlen(SENSOR_BM_LOG_ENABLE), &pmeLogEnable)) {
-    pmeLogEnableCfg = true;
-  }
-  if (get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_DOT_INTERVAL_S, strlen(SENSOR_BM_DOT_INTERVAL_S), &pmeDOTIntervalS)) {
-    pmeDOTIntervalSCfg = true;
-  }
-  if (get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_WIPE_INTERVAL_S, strlen(SENSOR_BM_WIPE_INTERVAL_S), &pmeWipeIntervalS)) {
-    pmeWipeIntervalSCfg = true;
-  }
+  get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_LOG_ENABLE, strlen(SENSOR_BM_LOG_ENABLE),
+                  &pmeLogEnable);
+  get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_DOT_INTERVAL_S,
+                  strlen(SENSOR_BM_DOT_INTERVAL_S), &pmeDOTIntervalS);
+  get_config_uint(BM_CFG_PARTITION_SYSTEM, SENSOR_BM_WIPE_INTERVAL_S,
+                  strlen(SENSOR_BM_WIPE_INTERVAL_S), &pmeWipeIntervalS);
+  printf("pmeLogEnable: %" PRIu32 "\n", pmeLogEnable);
+  printf("pmeDOTIntervalS: %" PRIu32 "\n", pmeDOTIntervalS);
+  printf("pmeWipeIntervalS: %" PRIu32 "\n", pmeWipeIntervalS);
 
   pmeSensor.init();
   pmeDoTopicStrLen = createPmeDoMeasurementDataTopic();
   pmeWipeTopicStrLen = createPmeWipeDataTopic();
   lastWipeEpochS = loadLastWipeEpoch();
   printf("Last wipe time: %lu\n", lastWipeEpochS);
-  if (pmeLogEnableCfg == true) {
-    printf("User-defined pmeLogEnable found: %" PRIu32 "\n", pmeLogEnable);
-  }
-  else {
-    printf("No user-defined pmeLogEnable - defaulting to: %" PRIu32 "\n", pmeLogEnable);
-  }
-
-  if (pmeDOTIntervalSCfg == true) {
-    printf("User-defined pmeDOTIntervalS found: %" PRIu32 " seconds.\n", pmeDOTIntervalS);
-  }
-  else {
-    printf("No user-defined pmeDOTIntervalS - defaulting to: %" PRIu32 " seconds.\n", pmeDOTIntervalS);
-  }
-
-  if (pmeWipeIntervalSCfg == true) {
-    printf("User-defined pmeWipeIntervalS found: %" PRIu32 " seconds.\n", pmeWipeIntervalS);
-  }
-  else {
-    printf("No user-defined pmeWipeIntervalS - defaulting to: %" PRIu32 " seconds.\n\n", pmeWipeIntervalS);
-  }
   // Ensure Vbus stable before enabling Vout
   IOWrite(&BB_VBUS_EN, 0);
   bm_delay(50);
+  // Turn off LEDs
   ledAllOff();
   //Set first DO measurement flag to true to trigger startup DO measurement
   firstDo = true;
@@ -134,8 +112,13 @@ void loop(void) {
   RTCTimeAndDate_t time_and_date = {};
   bool rtcIsSet = rtcGet(&time_and_date);
   uint64_t epochTimeSec = (rtcGetMicroSeconds(&time_and_date) / 1000000);
+  //used for debugging RTC intervals
+  // printf("&&& epochTimeSec: %llu\n", epochTimeSec);
   uint64_t currentUptimeSec = uptimeGetMs() / 1000;
- 
+  // Debugging timers
+  // printf("currentUptimeSec: %llu\n",currentUptimeSec);
+  // printf("currentUptimeMs: %" PRIu64 ", uptimeGetMs: %" PRIu64 ", remainingWipeTime: %" PRIu64 ", remainingDoTime: %" PRIu64 "\n", currentUptimeMs, uptimeGetMs(), remainingWipeTime, remainingDoTime);
+
   //////////
   // Wipe //
   //////////
@@ -158,20 +141,17 @@ void loop(void) {
           bm_pub_wl(pmeWipeTopic, pmeWipeTopicStrLen, cborBuf, encodedLen, 0,
                     BM_COMMON_PUB_SUB_VERSION);
           printf("#  WIPE Encoding success! | Topic: %s, cborBuf: %d, \n", pmeWipeTopic,
-                 cborBuf); 
+                 cborBuf); // Debugging
+          //optional with config, todo
         } else {
           printf("!  Failed to encode WIPE data message\n");
         }
       }
     } else {
-      if (elapsedWipe % 10 == 0) {
-        printf("Wipe timer: %llu of %i seconds\n", elapsedWipe, pmeWipeIntervalS);
-      }
+      printf("Wipe timer: %llu of %i seconds\n", elapsedWipe, pmeWipeIntervalS);
     }
   } else {
-    if (currentUptimeSec % 10 == 0) {
-      printf("Wipe timer: !!! Not wiping - RTC is not set!\n");
-    }
+    printf("!  Not wiping; RTC is not set!\n");
   }
 
   /////////
@@ -191,9 +171,10 @@ void loop(void) {
       if (PmeDissolvedOxygenMsg::encode(d, cborBuf, sizeof(cborBuf), &encodedLen) ==
           CborNoError) {
         printf("#  DOT Encoding success! | Topic: %s, cborBuf: %d, \n", pmeDoTopic,
-               cborBuf);
+               cborBuf); // Debugging
         bm_pub_wl(pmeDoTopic, pmeDoTopicStrLen, cborBuf, encodedLen, 0,
                   BM_COMMON_PUB_SUB_VERSION);
+        //optional with config, todo
         if (true) {
           debugTx();
         }
@@ -205,9 +186,7 @@ void loop(void) {
     }
     lastDoMeasurementUptimeSec = currentUptimeSec;
   } else {
-    if (elapsedDoSec % 10 == 0) {
     printf("DOT timer: %llu of %i seconds\n", elapsedDoSec, pmeDOTIntervalS);
-    }
   }
   bm_delay(1000);
 }
