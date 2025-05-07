@@ -39,6 +39,7 @@ set(LIB_FILES
     ${LIB_DIR}/common/reset_reason.c
     ${LIB_DIR}/common/serial.c
     ${LIB_DIR}/common/sensorWatchdog.cpp
+    ${LIB_DIR}/common/malloc.c
     ${LIB_DIR}/common/serial_console_u5.cpp
     ${LIB_DIR}/common/stress.c
     ${LIB_DIR}/common/tokenize.c
@@ -75,6 +76,7 @@ set(LIB_FILES
     ${LIB_DIR}/drivers/ina232.cpp
     ${LIB_DIR}/drivers/nau7802.cpp
     ${LIB_DIR}/drivers/ms5803.cpp
+    ${LIB_DIR}/drivers/pa7ld.cpp
     ${LIB_DIR}/drivers/pca9535.c
     ${LIB_DIR}/drivers/protected/protected_i2c.c
     ${LIB_DIR}/drivers/protected/protected_spi.c
