@@ -11,10 +11,14 @@
 #include "app_util.h"
 #include "bno085.h"
 #include "sh2.h"
+#include "pa7ld.h"
 
 sh2_Hal_t sh2_hal_driver;
 
 static Bno085 bno085_imu(&i2c1, IMU_ADDR);
+
+// TODO - create a #define or constant somewhere for the depth address
+static PA7LD depth_sensor(&i2c1, 0x40);
 
 void setup(void) {
   /* USER ONE-TIME SETUP CODE GOES HERE */
@@ -27,5 +31,7 @@ void loop(void) {
   if (curr_time_ms - 1000 > prev_time_ms) {
     printf("time: %" PRIu32 " ms\n", curr_time_ms);
     prev_time_ms = curr_time_ms;
+    float pressure, temp;
+    depth_sensor.readPTRaw(pressure, temp);
   }
 }

@@ -76,6 +76,7 @@ set(LIB_FILES
     ${LIB_DIR}/drivers/ina232.cpp
     ${LIB_DIR}/drivers/nau7802.cpp
     ${LIB_DIR}/drivers/ms5803.cpp
+    ${LIB_DIR}/drivers/pa7ld.cpp
     ${LIB_DIR}/drivers/pca9535.c
     ${LIB_DIR}/drivers/protected/protected_i2c.c
     ${LIB_DIR}/drivers/protected/protected_spi.c
