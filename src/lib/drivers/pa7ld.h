@@ -37,4 +37,7 @@ private:
   bool readData(uint8_t *data, size_t dataSize);
   bool getRawValue(uint32_t *value, uint32_t timeoutMs);
 
+  float P_min;
+  float P_max;
+
 };

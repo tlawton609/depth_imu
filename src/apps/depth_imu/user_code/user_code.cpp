@@ -22,16 +22,23 @@ static PA7LD depth_sensor(&i2c1, 0x40);
 
 void setup(void) {
   /* USER ONE-TIME SETUP CODE GOES HERE */
+  vTaskDelay(10000);
+  depth_sensor.init();
 }
 
 void loop(void) {
   /* USER LOOP CODE GOES HERE */
   uint32_t curr_time_ms = bno085_imu.getTimeUs(&sh2_hal_driver)/1000;
   static uint32_t prev_time_ms = 0;
-  if (curr_time_ms - 1000 > prev_time_ms) {
+  if (curr_time_ms - 10000 > prev_time_ms) {
     printf("time: %" PRIu32 " ms\n", curr_time_ms);
     prev_time_ms = curr_time_ms;
     float pressure, temp;
     depth_sensor.readPTRaw(pressure, temp);
+    printf("pressure: %f bar, temp: %f °C\n", pressure, temp);
+    depth_sensor.readPTRaw(pressure, temp);
+    printf("pressure: %f bar, temp: %f °C\n", pressure, temp);
+    depth_sensor.readPTRaw(pressure, temp);
+    printf("pressure: %f bar, temp: %f °C\n", pressure, temp);
   }
 }
