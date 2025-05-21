@@ -107,11 +107,15 @@ bool PA7LD::readPTRaw(float &pressure, float &temperature) {
     //   printf("d: %" PRIx8 "\n", adc[i]);
     // }
 
-    uint16_t press = (uint16_t)(adc[2] | ((uint16_t)adc[1] << 8));
+    uint16_t press = ((uint16_t)adc[2] | ((uint16_t)adc[1] << 8));
     pressure = (float)(press - 16384) * (P_max - P_min) / 32768 + P_min;
 
-    uint16_t temp = (uint16_t)(adc[4] | ((uint16_t)adc[3] << 8));
-    temperature = (((temp >> 4) - 24) *  0.05) - 50;
+    printf("press: %" PRIx16 "\n", press);
+
+    uint16_t temp = ((uint16_t)adc[4] | ((uint16_t)adc[3] << 8));
+    temperature = (float)(((temp >> 4) - 24) *  0.05) - 50;
+
+    printf("temp: %" PRIx16 "\n", temp);
 
   } while (0);
   return rval;
