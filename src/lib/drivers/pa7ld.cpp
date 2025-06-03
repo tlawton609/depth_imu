@@ -58,6 +58,8 @@ bool PA7LD::init() {
 
   P_min = (float)(uint32_t(scaling1 << 16 | scaling2));
   printf("P_min: %f\n", P_min);
+  P_min = 0;
+  printf("P_min: %f\n", P_min);
 
   sendCommand(SCALING3, 1);
   vTaskDelay(2);
@@ -74,6 +76,8 @@ bool PA7LD::init() {
   printf("scaling4: %" PRIx16 "\n", scaling4);
 
   P_max = (float)(((uint32_t)scaling3 << 16 | scaling4));
+  printf("P_max: %f\n", P_max);
+  P_max = 10;
   printf("P_max: %f\n", P_max);
 
   return true;
