@@ -76,6 +76,9 @@ bool PA7LD::init() {
   P_max = (float)(((uint32_t)scaling3 << 16 | scaling4));
   printf("P_max: %f\n", P_max);
 
+  P_min = 0;
+  P_max = 100;
+  
   return true;
 }
 
