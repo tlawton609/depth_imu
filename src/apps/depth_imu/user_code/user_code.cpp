@@ -23,13 +23,12 @@ double rho_fresh =  997.0474; // kg/m^3
 static constexpr char FRESH_WATER_FLAG[]  = "fresh_water";
 static constexpr uint8_t DEPTH_SENSOR_ADDR = 0x40;
 
-static bool fresh_water = false;
+static uint32_t fresh_water = 0;
 
 sh2_Hal_t sh2_hal_driver;
 
 static Bno085 bno085_imu(&i2c1, IMU_ADDR);
 
-// TODO - create a #define or constant somewhere for the depth address
 static PA7LD depth_sensor(&i2c1, DEPTH_SENSOR_ADDR);
 
 void setup(void) {
@@ -37,7 +36,7 @@ void setup(void) {
   vTaskDelay(10000);
   depth_sensor.init();
 
-  get_config_bool(BM_CFG_PARTITION_SYSTEM, FRESH_WATER_FLAG, strlen(FRESH_WATER_FLAG), &fresh_water);
+  get_config_uint(BM_CFG_PARTITION_SYSTEM, FRESH_WATER_FLAG, strlen(FRESH_WATER_FLAG), &fresh_water);
 
 }
 
