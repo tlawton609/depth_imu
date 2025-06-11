@@ -58,6 +58,8 @@ bool PA7LD::init() {
 
   P_min = (float)(uint32_t(scaling1 << 16 | scaling2));
   printf("P_min: %f\n", P_min);
+  P_min = 0;
+  printf("P_min: %f\n", P_min);
 
   sendCommand(SCALING3, 1);
   vTaskDelay(2);
@@ -74,6 +76,8 @@ bool PA7LD::init() {
   printf("scaling4: %" PRIx16 "\n", scaling4);
 
   P_max = (float)(((uint32_t)scaling3 << 16 | scaling4));
+  printf("P_max: %f\n", P_max);
+  P_max = 10;
   printf("P_max: %f\n", P_max);
 
   P_min = 0;
@@ -110,11 +114,15 @@ bool PA7LD::readPTRaw(float &pressure, float &temperature) {
     //   printf("d: %" PRIx8 "\n", adc[i]);
     // }
 
-    uint16_t press = (uint16_t)(adc[2] | ((uint16_t)adc[1] << 8));
+    uint16_t press = ((uint16_t)adc[2] | ((uint16_t)adc[1] << 8));
     pressure = (float)(press - 16384) * (P_max - P_min) / 32768 + P_min;
 
-    uint16_t temp = (uint16_t)(adc[4] | ((uint16_t)adc[3] << 8));
-    temperature = (((temp >> 4) - 24) *  0.05) - 50;
+    printf("press: %" PRIx16 "\n", press);
+
+    uint16_t temp = ((uint16_t)adc[4] | ((uint16_t)adc[3] << 8));
+    temperature = (float)(((temp >> 4) - 24) *  0.05) - 50;
+
+    printf("temp: %" PRIx16 "\n", temp);
 
   } while (0);
   return rval;
